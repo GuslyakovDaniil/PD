@@ -1,0 +1,15 @@
+.nav-item {
+    color: #2946a0;
+  }
+  .nav-link {
+    color: white;
+  }
+  .nav-brand {
+    color: white;
+  }
+  .buttons_start {
+    height: 40em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
