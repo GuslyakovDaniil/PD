@@ -1,19 +1,18 @@
 <?php
-// подключение к базе данных
-$conn = mysqli_connect('localhost', 'root', 'mysql', 'registration');
+// Connect to the database
+$conn = mysqli_connect('localhost', 'root', 'mysql', 'register-bd');
 
-// получение id из GET-запроса
-$id = $_GET['id'];
+// Query the database
+$result = mysqli_query($conn, "SELECT username FROM users WHERE id = 1");
 
-// параметризованный запрос
-$query = 'SELECT username FROM users WHERE id = ?';
-$stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param($stmt, 'i', $id);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+// Fetch the result
+$row = mysqli_fetch_assoc($result);
 
-// вывод данных на страницу
-while ($row = mysqli_fetch_assoc($result)) {
-    echo htmlspecialchars($row['tusername']);
-}
+// Save the text in a variable
+$text = $row['username'];
+
+// Close the database connection
+mysqli_close($conn);
+
+echo $text
 ?>

@@ -4,6 +4,11 @@
 <head>
     <title>Registration</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        body {
+            background-color: #5a6bc4; /* добавлено свойство заднего фона */
+        }
+    </style>
 </head>
 <body>
 <div class="header">

@@ -51,27 +51,10 @@
                 </li>
             </ul>
         </div>
+        <?php include '/PD/reg/1.php'; ?>
         <div class="card-body">
             <h5 class="card-title">
-                <?php
-// Подключение к базе данных
-$conn = mysqli_connect('localhost', 'root', 'mysql', 'registration');;
-
-// SQL-запрос
-$sql = "SELECT username FROM users WHERE id=1";
-
-// Выполнение запроса
-$result = mysqli_query($conn, $sql);
-
-// Извлечение данных в ассоциативный массив
-$data = mysqli_fetch_assoc($result);
-
-// Вывод текста на страницу
-echo '<p>' . $data['username'] . '</p>';
-
-                // Закрытие соединения
-                mysqli_close($conn);
-                ?>
+                <?php echo htmlspecialchars($text); ?>
             </h5>
             <p class="card-text">Студент Группы УВП-213</p>
         </div>
