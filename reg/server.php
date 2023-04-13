@@ -51,7 +51,7 @@ if (isset($_POST['reg_user'])) {
         mysqli_query($db, $query);
         $_SESSION['username'] = $username;
         $_SESSION['success'] = "You are now logged in";
-        header('location: /PD/website/personal_office_tutor.html');
+        header('location: /PD/websiteV2/lk_tut.html');
     }
 }
 
@@ -76,7 +76,7 @@ if (isset($_POST['login_user'])) {
         if (mysqli_num_rows($results) == 1) {
             $_SESSION['username'] = $username;
             $_SESSION['success'] = "You are now logged in";
-            header('location: /PD/website/personal_office_tutor.html');
+            header('location: /PD/websiteV2/lk_tut.html');
         }else {
             array_push($errors, "Wrong username/password combination");
         }
