@@ -76,7 +76,21 @@
     }
     ?>
   </h2>
-  <p>Дополнительная информация о преподавателе</p>
+  <p>
+    <?php
+    // connect to the database
+    $db = mysqli_connect('localhost', 'root', 'mysql', 'teacher-bd');
+
+    // get the department name for the current user
+    $username = $_SESSION['username'];
+    $query = "SELECT name_of_the_department FROM users WHERE username='$username'";
+    $result = mysqli_query($db, $query);
+    $department = mysqli_fetch_assoc($result)['name_of_the_department'];
+
+    // display the department name
+    echo $department;
+    ?>
+  </p>
 </div>
 </body>
 </html>
