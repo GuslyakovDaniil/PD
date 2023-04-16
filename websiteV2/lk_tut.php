@@ -66,7 +66,16 @@
   </div>
 </div>
 <div id="content">
-  <h2>Имя преподавателя и его кафедра</h2>
+  <h2>
+    <?php
+    session_start();
+    if(isset($_SESSION['username'])) {
+      echo 'Добро пожаловать, ' . $_SESSION['username'] . '!';
+    } else {
+      header('location: /PD/websiteV2/login.php');
+    }
+    ?>
+  </h2>
   <p>Дополнительная информация о преподавателе</p>
 </div>
 </body>
