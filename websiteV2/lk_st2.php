@@ -66,8 +66,31 @@
   </div>
 </div>
 <div id="content">
-  <h2>Имя студента и группа</h2>
-  <p>Дополнительная информация о студенте</p>
+  <h2>
+    <?php
+    session_start();
+    if(isset($_SESSION['username'])) {
+      echo 'Добро пожаловать, ' . $_SESSION['username'] . '!';
+    } else {
+      header('location: /PD/websiteV2/login_st.php');
+    }
+    ?>
+  </h2>
+  <p>
+    <?php
+    // connect to the database
+    $db = mysqli_connect('localhost', 'root', 'mysql', 'student-bd');
+
+    // get the department name for the current user
+    $username = $_SESSION['username'];
+    $query = "SELECT group_number FROM users WHERE username='$username'";
+    $result = mysqli_query($db, $query);
+    $department = mysqli_fetch_assoc($result)['group_number'];
+
+    // display the department name
+    echo $department;
+    ?>
+  </p>
 </div>
 </body>
 </html>
