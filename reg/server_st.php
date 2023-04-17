@@ -12,18 +12,18 @@ $db = mysqli_connect('localhost', 'root', 'mysql', 'student-bd');
 // REGISTER USER
 if (isset($_POST['reg_user'])) {
     // receive all input values from the form
-    $group_number = mysqli_real_escape_string($db, $_POST['group_number']);
     $username = mysqli_real_escape_string($db, $_POST['username']);
     $email = mysqli_real_escape_string($db, $_POST['email']);
     $password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
     $password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
+    $group_number = mysqli_real_escape_string($db, $_POST['group_number']);
 
     // form validation: ensure that the form is correctly filled ...
     // by adding (array_push()) corresponding error unto $errors array
-    if (empty($group_number)) { array_push($errors, "Group number is required"); }
     if (empty($username)) { array_push($errors, "Username is required"); }
     if (empty($email)) { array_push($errors, "Email is required"); }
     if (empty($password_1)) { array_push($errors, "Password is required"); }
+    if (empty($group_number)) { array_push($errors, "Group number is required"); }
     if ($password_1 != $password_2) {
         array_push($errors, "The two passwords do not match");
     }
@@ -48,8 +48,8 @@ if (isset($_POST['reg_user'])) {
     if (count($errors) == 0) {
         $password = md5($password_1);//encrypt the password before saving in the database
 
-        $query = "INSERT INTO users (username, email, password) 
-  			  VALUES('$username', '$email', '$password')";
+        $query = "INSERT INTO users (username, email, password, group_number) 
+  			  VALUES('$username', '$email', '$password', '$group_number')";
         mysqli_query($db, $query);
         $_SESSION['username'] = $username;
         $_SESSION['success'] = "You are now logged in";
@@ -78,7 +78,7 @@ if (isset($_POST['login_user'])) {
         if (mysqli_num_rows($results) == 1) {
             $_SESSION['username'] = $username;
             $_SESSION['success'] = "You are now logged in";
-            header('location: /PD/websiteV2/lk_st2.html');
+            header('location: /PD/websiteV2/lk_st2.php');
         }else {
             array_push($errors, "Wrong username/password combination");
         }

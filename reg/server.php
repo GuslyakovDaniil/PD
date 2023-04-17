@@ -54,7 +54,7 @@ if (isset($_POST['reg_user'])) {
         mysqli_query($db, $query);
         $_SESSION['username'] = $username;
         $_SESSION['success'] = "You are now logged in";
-        header('location: /PD/websiteV2/lk_tut.php');
+        header('location: index_st.php');
     }
 }
 

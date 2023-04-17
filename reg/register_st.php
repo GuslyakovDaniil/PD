@@ -29,6 +29,10 @@
         <input type="password" name="password_2">
     </div>
     <div class="input-group">
+        <label>Group</label>
+        <input type="text" name="group_number">
+    </div>
+    <div class="input-group">
         <button type="submit" class="btn" name="reg_user">Register</button>
     </div>
     <p>
