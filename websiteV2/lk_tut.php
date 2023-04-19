@@ -43,7 +43,7 @@
       height: calc(100vh - 100px);
     }
     #content h2 {
-      margin: 0;
+      margin: -150px;
       font-size: 24px;
       text-align: center;
       margin-bottom: 20px;
@@ -61,7 +61,7 @@
   <div>
     <a href="/PD/websiteV2/lk_tut.html">личный кабинет</a>
     <a href="/PD/websiteV2/create_test.html">создать тест</a>
-    <a href="/PD/websiteV2/resTest_tut.html">результаты</a>
+    <a href="/PD/websiteV2/resTest_tut.php">результаты</a>
     <a href="/PD/website/choise.html">выход</a>
   </div>
 </div>

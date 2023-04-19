@@ -43,7 +43,7 @@
       height: calc(100vh - 100px);
     }
     #content h2 {
-      margin: 0;
+      margin: -150px;
       font-size: 24px;
       text-align: center;
       margin-bottom: 20px;

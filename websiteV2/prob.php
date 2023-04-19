@@ -40,7 +40,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: calc(100vh - 100px);
+            height: calc(78vh - 100px);
         }
         #content h2 {
             margin: 0;
@@ -66,7 +66,6 @@
     </div>
 </div>
 <div id="content">
-    <h2>Результаты тестов</h2>
     <h1>Поиск результата прохождения теста</h1>
     <form method="get" action="search_results.php">
       <label for="title">Название теста:</label>

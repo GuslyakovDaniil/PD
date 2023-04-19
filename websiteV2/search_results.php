@@ -43,7 +43,7 @@
             height: calc(100vh - 100px);
         }
         #content h2 {
-            margin: 0;
+            margin: -150px;
             font-size: 24px;
             text-align: center;
             margin-bottom: 20px;
@@ -65,6 +65,7 @@
         <a href="/PD/website/choise.html">выход</a>
     </div>
 </div>
+<div id="content">
 <?php
 // Подключение к базе данных
 $host = 'localhost';
@@ -103,6 +104,7 @@ if (isset($_GET['title'])) {
 // Закрытие соединения с базой данных
 mysqli_close($conn);
 ?>
+</div>
 </body>
 </body>
 </html>
