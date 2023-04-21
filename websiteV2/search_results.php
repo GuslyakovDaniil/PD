@@ -61,7 +61,7 @@
     <div>
         <a href="/PD/websiteV2/lk_tut.php">личный кабинет</a>
         <a href="/PD/websiteV2/create_test.html">создать тест</a>
-        <a href="/PD/websiteV2/resTest_tut.html">результаты</a>
+        <a href="/PD/websiteV2/resTest_tut.php">результаты</a>
         <a href="/PD/website/choise.html">выход</a>
     </div>
 </div>
