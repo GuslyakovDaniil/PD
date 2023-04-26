@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <style>
         body {
-            background-color: #5a6bc4; /* добавлено свойство заднего фона */
+            background-color: #1a1a2e; /* добавлено свойство заднего фона */
         }
     </style>
 </head>
