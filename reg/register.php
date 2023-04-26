@@ -2,8 +2,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registration system PHP and MySQL</title>
+    <title>Registration tutor</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        body {
+            background-color: #5a6bc4; /* добавлено свойство заднего фона */
+        }
+    </style>
 </head>
 <body>
 <div class="header">
@@ -36,7 +41,7 @@
         <button type="submit" class="btn" name="reg_user">Register</button>
     </div>
     <p>
-        Already a member? <a href="login.php">Sign in</a>
+    Exit to the home page <a href="/PD/website/choise_adm.html">Enter</a>
     </p>
 </form>
 </body>

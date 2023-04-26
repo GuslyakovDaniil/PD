@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registration system PHP and MySQL</title>
+    <title>Registration student</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -36,7 +36,7 @@
         <button type="submit" class="btn" name="reg_user">Register</button>
     </div>
     <p>
-        Already a member? <a href="login_st.php">Sign in</a>
+    Exit to the home page <a href="/PD/website/choise_adm.html">Enter</a>
     </p>
 </form>
 </body>
