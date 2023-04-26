@@ -28,6 +28,9 @@
     <div class="input-group">
         <button type="submit" class="btn" name="login_user">Login</button>
     </div>
+    <p>
+    Exit to the home page <a href="/PD/website/choise.html">Enter</a>
+    </p>
 </form>
 </body>
 </html>
