@@ -59,9 +59,9 @@
 <div id="header">
   <h1>Личный кабинет студента</h1>
   <div>
-    <a href="/PD/websiteV2/lk_st2.html">личный кабинет</a>
+    <a href="/PD/websiteV2/lk_st2.php">личный кабинет</a>
     <a href="/PD/websiteV2/test_st.html">тесты</a>
-    <a href="/PD/websiteV2/ResTest_st.html">результаты</a>
+    <a href="/PD/websiteV2/ResTest_st.php">результаты</a>
     <a href="/PD/website/choise.html">выход</a>
   </div>
 </div>

@@ -12,7 +12,6 @@
       padding: 0;
     }
     /*верхняя панель*/
-    /*тут был даня*/
     #header {
       display: flex;
       justify-content: space-between;
@@ -41,7 +40,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 100px);
+      height: calc(78vh - 100px);
     }
     #content h2 {
       margin: 0;
@@ -62,13 +61,18 @@
   <div>
     <a href="/PD/websiteV2/lk_st2.php">личный кабинет</a>
     <a href="/PD/websiteV2/test_st.html">тесты</a>
-    <a href="#">результаты</a>
+    <a href="/PD/websiteV2/Restest_st.php">результаты</a>
     <a href="/PD/website/choise.html">выход</a>
   </div>
 </div>
 <div id="content">
-  <h2>Результаты теста</h2>
-  <p>Результаты теста будут здесь</p>
+  <h1>Поиск результата прохождения теста</h1>
+  <form method="get" action="search_results.php">
+    <label for="title">Название теста:</label>
+    <input type="text" id="title" name="title" required>
+    <button type="submit">Искать</button>
+  </form>
+</body>
 </div>
 </body>
 </html>
