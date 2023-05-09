@@ -104,12 +104,11 @@
 .button:hover {
   background-color: #6d6da3;
 }
-/*зачем нам фотография студента если он еще не зарегестрировался? */
   </style>
 </head>
 <body>
 <div id="header">
-    <img src="/2/images/RjB1TsuOyUU.jpg" alt="Фотография студента" style="width: 420px; height: 100px; margin-right: 10px; margin: 0;">
+<img src="/2/images/RjB1TsuOyUU.jpg" alt="Фотография преподавателя" style="width: 420px; height: 100px; margin-right: 10px; margin: 0;">
   <div class="btn-container">
     <a href="/PD/reg/login.php">Преподаватель</a>
     <a href="\2\index.html">Начальная страница</a>
