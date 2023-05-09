@@ -104,6 +104,7 @@
 .button:hover {
   background-color: #6d6da3;
 }
+/*зачем нам фотография студента если он еще не зарегестрировался? */
   </style>
 </head>
 <body>
