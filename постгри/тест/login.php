@@ -1,4 +1,6 @@
 <?php
+session_start(); // Начало сессии
+
 // Подключение к базе данных PgAdmin4
 $dbhost = 'localhost'; // адрес хоста базы данных
 $dbname = 'testingsystem'; // имя базы данных
@@ -28,12 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Проверка пароля
         $hashedPassword = $row['password'];
         if (password_verify($password, $hashedPassword)) {
-            // Установка сессии для авторизованного пользователя
-            session_start();
+            // Установка имени пользователя в сессии
             $_SESSION['username'] = $username;
             echo 'Вы успешно вошли на сайт.';
             // Редирект на защищенную страницу
-            header('Location: register.php');
+            header('Location: seach_test_student.php');
             exit();
         } else {
             echo 'Неверный пароль.';

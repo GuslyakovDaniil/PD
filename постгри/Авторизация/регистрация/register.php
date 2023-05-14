@@ -17,9 +17,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Получение данных из формы
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $accessLevel = $_POST['access_level'];
+    $fullName = $_POST['full_name'];
+
+    // Проверка наличия уже существующего логина
+    $stmt_check = $dbh->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
+    $stmt_check->bindParam(':username', $username);
+    $stmt_check->execute();
+    $count = $stmt_check->fetchColumn();
+
+    if ($count > 0) {
+        echo 'Пользователь с таким логином уже существует.';
+        return;
+    }
 
     // Валидация данных (можно добавить дополнительные проверки, например, на длину пароля)
-    if (empty($username) || empty($password)) {
+    if (empty($username) || empty($password) || empty($accessLevel) || empty($fullName)) {
         echo 'Заполните все поля формы регистрации.';
     } else {
         // Хеширование пароля
@@ -27,9 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             // Вставка данных пользователя в базу данных
-            $stmt = $dbh->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
+            $stmt = $dbh->prepare("INSERT INTO users (username, password, access_level, full_name) VALUES (:username, :password, :access_level, :full_name)");
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':password', $hashedPassword);
+            $stmt->bindParam(':access_level', $accessLevel);
+            $stmt->bindParam(':full_name', $fullName);
+
             $stmt->execute();
 
             echo 'Регистрация успешна. Можете войти на сайт.';
@@ -39,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,7 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="username" required><br><br>
         <label>Пароль:</label>
         <input type="password" name="password" required><br><br>
+        <label>Уровень доступа:</label>
+        <input type="text" name="access_level" required><br><br>
+        <label>ФИО:</label>
+        <input type="text" name="full_name" required><br><br>
         <input type="submit" value="Зарегистрироваться">
     </form>
 </body>
 </html>
+
+
+
