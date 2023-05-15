@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     $accessLevel = $_POST['access_level'];
     $fullName = $_POST['full_name'];
+    $age = $_POST['age'];
+    $division = $_POST['division'];
 
     // Проверка наличия уже существующего логина
     $stmt_check = $dbh->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
@@ -32,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Валидация данных (можно добавить дополнительные проверки, например, на длину пароля)
-    if (empty($username) || empty($password) || empty($accessLevel) || empty($fullName)) {
+    if (empty($username) || empty($password) || empty($accessLevel) || empty($fullName)|| empty($division)) {
         echo 'Заполните все поля формы регистрации.';
     } else {
         // Хеширование пароля
@@ -40,11 +42,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             // Вставка данных пользователя в базу данных
-            $stmt = $dbh->prepare("INSERT INTO users (username, password, access_level, full_name) VALUES (:username, :password, :access_level, :full_name)");
+            $stmt = $dbh->prepare("INSERT INTO users (username, password, access_level, full_name, age, division) VALUES (:username, :password, :access_level, :full_name, :age, :division)");
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':access_level', $accessLevel);
             $stmt->bindParam(':full_name', $fullName);
+            $stmt->bindParam(':age', $age);
+            $stmt->bindParam(':division', $division);
 
             $stmt->execute();
 
@@ -71,6 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="access_level" required><br><br>
         <label>ФИО:</label>
         <input type="text" name="full_name" required><br><br>
+        <label>Возраст:</label>
+        <input type="text" name="age" required><br><br>
+        <label>Принадлежность:</label>
+        <input type="text" name="division" required><br><br>
         <input type="submit" value="Зарегистрироваться">
     </form>
 </body>

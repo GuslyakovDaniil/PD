@@ -36,15 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $username;
                 echo 'Вы успешно вошли на сайт.';
                 // Редирект на защищенную страницу
-                header('Location: /PD/постгри/ЛК/index_lk_teacher.php');
-                exit();
-            } else {
-                // Установка имени пользователя в сессии
-                $_SESSION['username'] = $username;
-                echo 'Вы успешно вошли на сайт.';
-                // Редирект на защищенную страницу
                 header('Location: /PD/постгри/ЛК/index_lk_student.php');
                 exit();
+            } else {
+                echo 'У вас нет разрешения на вход.';
             }
         } else {
             echo 'Неверный пароль.';

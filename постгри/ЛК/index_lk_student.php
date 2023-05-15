@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -203,6 +204,46 @@ border-radius: 20px;
         }
     </style>
 </head>
+<?php
+// Предполагая, что сессия уже запущена
+session_start();
+
+// Получение значения username из сессии
+$username = $_SESSION['username'];
+
+// Установка параметров для подключения к базе данных
+$dbhost = 'localhost';
+$dbname = 'testingsystem';
+$dbuser = 'postgres';
+$dbpass = 'mysql';
+
+try {
+    // Установка соединения с базой данных
+    $conn = new PDO("pgsql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
+
+    // Установка режима обработки ошибок
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Подготовка SQL-запроса с использованием подстановки параметров
+    $query = "SELECT full_name, division, age FROM users WHERE username = :username";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':username', $username);
+    
+    // Выполнение запроса
+    $stmt->execute();
+
+    // Получение результатов
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Ошибка выполнения запроса: " . $e->getMessage();
+    exit;
+}
+
+// Получение значений полей
+$full_name = $result['full_name'];
+$division = $result['division'];
+$age = $result['age'];
+?>
 <body>
     <div class = "box_backgraund"></div>
     <div class = "back_phone"></div>
@@ -211,14 +252,14 @@ border-radius: 20px;
     <div class="avatar"></div>
         <div class = "logo"></div>
     </div>
-    <div class = "title_create_test">Прохождение теста</div>
-    <div class = "title_result">Результаты</div>
-    <a href="1_str.html" class = "title_out">Выход</a>
-    <div class = "title_name">Ф.И.О.:</div>
-        <div class = "box_name"></div>
-    <div class = "title_departament">Группа:</div>
-        <div class = "box_departament"></div>
-    <div class = "title_page">Возраст:</div>
-        <div class = "box_page"></div>
+    <div class="title_create_test">Прохождение теста</div>
+<div class="title_result">Результаты</div>
+<a href="1_str.html" class="title_out">Выход</a>
+<div class="title_name">Ф.И.О.:</div>
+<div class="box_name"><?php echo $full_name; ?></div>
+<div class="title_departament">Группа:</div>
+<div class="box_departament"><?php echo $division; ?></div>
+<div class="title_page">Возраст:</div>
+<div class="box_page"><?php echo $age; ?></div>
 </body>
 </html>

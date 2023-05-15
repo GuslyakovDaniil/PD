@@ -1,3 +1,4 @@
+/PD/постгри/ЛК/index_lk_teacher.php
 <?php
 session_start(); // Начало сессии
 
@@ -31,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashedPassword = $row['password'];
         if (password_verify($password, $hashedPassword)) {
             // Проверка уровня доступа
-            if ($row['access_level'] == 1) {
+            if ($row['access_level'] == 0) {
                 // Установка имени пользователя в сессии
                 $_SESSION['username'] = $username;
                 echo 'Вы успешно вошли на сайт.';
@@ -39,12 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: /PD/постгри/ЛК/index_lk_teacher.php');
                 exit();
             } else {
-                // Установка имени пользователя в сессии
-                $_SESSION['username'] = $username;
-                echo 'Вы успешно вошли на сайт.';
-                // Редирект на защищенную страницу
-                header('Location: /PD/постгри/ЛК/index_lk_student.php');
-                exit();
+                echo 'У вас нет разрешения на вход.';
             }
         } else {
             echo 'Неверный пароль.';
