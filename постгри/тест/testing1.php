@@ -345,7 +345,7 @@ text-align: center;
             <div class="v1_124"></div>
             <span class="v1_125">Далее</span>
             <div class="v1_126"></div>
-            <span class="v1_127">Выход</span>
+            <a  href="/PD/постгри/ЛК/index_lk_student.php" class="v1_127">Выход</a>
             <div class="v1_128"></div>
             <form method="post" action="">
             <?php
@@ -392,6 +392,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':test_name', $testName);
         $stmt->bindParam(':question', $question);
         $stmt->bindParam(':username', $username);
+        
 
         $stmt->execute();
 
@@ -424,7 +425,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 echo '</form>';
 echo '<br>';
 } else {
-echo '<script>window.location.href = "quiz2.php";</script>'; // Замените "другая_страница.php" на URL другой страницы
+echo '<script>window.location.href = "/PD/постгри/тест/counter.php";</script>'; // Замените "другая_страница.php" на URL другой страницы
 exit();
 }
 ?>

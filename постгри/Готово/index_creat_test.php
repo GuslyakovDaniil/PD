@@ -400,7 +400,7 @@ text-align: center;
     </div>
     <div class="out">
         <input style="width: 156px;height: 61px;border-radius: 20px;background: transparent;border: none;"
-            type="button"onclick="location.href='personal_cabinet.php'" >
+            type="button"onclick="location.href='/PD/постгри/тест/Нач стр/index.php'" >
     </div>
             </form>
         </div>

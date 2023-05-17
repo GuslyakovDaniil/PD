@@ -32,14 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (password_verify($password, $hashedPassword)) {
             // Проверка уровня доступа
             if ($row['access_level'] == 1) {
+                echo 'У вас нет разрешения на вход.';
+            } else {
                 // Установка имени пользователя в сессии
                 $_SESSION['username'] = $username;
                 echo 'Вы успешно вошли на сайт.';
                 // Редирект на защищенную страницу
-                header('Location: /PD/постгри/ЛК/index_lk_student.php');
+                header('Location: /PD/постгри/тест/seach_test_student.php');
                 exit();
-            } else {
-                echo 'У вас нет разрешения на вход.';
             }
         } else {
             echo 'Неверный пароль.';

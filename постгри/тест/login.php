@@ -1,31 +1,31 @@
 <?php
 session_start(); // Начало сессии
-
+            
 // Подключение к базе данных PgAdmin4
 $dbhost = 'localhost'; // адрес хоста базы данных
 $dbname = 'testingsystem'; // имя базы данных
 $dbuser = 'postgres'; // имя пользователя базы данных
 $dbpass = 'mysql'; // пароль пользователя базы данных
-
+            
 try {
     $dbh = new PDO("pgsql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die('Подключение не удалось: ' . $e->getMessage());
 }
-
+            
 // Обработка отправленной формы входа
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Получение данных из формы
     $username = $_POST['username'];
     $password = $_POST['password'];
-
+            
     // Проверка наличия пользователя в базе данных
     $stmt = $dbh->prepare("SELECT password, access_level FROM users WHERE username = :username LIMIT 1");
     $stmt->bindParam(':username', $username);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
+            
     if ($row) {
         // Проверка пароля
         $hashedPassword = $row['password'];
@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($row['access_level'] == 1) {
                 // Установка имени пользователя в сессии
                 $_SESSION['username'] = $username;
+                  
                 echo 'Вы успешно вошли на сайт.';
                 // Редирект на защищенную страницу
                 header('Location: /PD/постгри/ЛК/index_lk_teacher.php');
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 // Установка имени пользователя в сессии
                 $_SESSION['username'] = $username;
+                          
                 echo 'Вы успешно вошли на сайт.';
                 // Редирект на защищенную страницу
                 header('Location: /PD/постгри/ЛК/index_lk_student.php');
@@ -54,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
+            
 <!DOCTYPE html>
 <html>
 <head>

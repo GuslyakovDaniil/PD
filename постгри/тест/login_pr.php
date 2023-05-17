@@ -1,4 +1,3 @@
-/PD/постгри/ЛК/index_lk_teacher.php
 <?php
 session_start(); // Начало сессии
 
@@ -32,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashedPassword = $row['password'];
         if (password_verify($password, $hashedPassword)) {
             // Проверка уровня доступа
-            if ($row['access_level'] == 0) {
+            if ($row['access_level'] == 1) {
                 // Установка имени пользователя в сессии
                 $_SESSION['username'] = $username;
                 echo 'Вы успешно вошли на сайт.';
