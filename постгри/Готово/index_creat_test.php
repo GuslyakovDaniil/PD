@@ -20,36 +20,20 @@ $createTableQuery = "CREATE TABLE IF NOT EXISTS quantity (
 )";
 $dbh->exec($createTableQuery);
 
-// Создание таблицы info (если она еще не существует)
-$createInfoTableQuery = "CREATE TABLE IF NOT EXISTS info (
-    test_name VARCHAR(255) NOT NULL,
-    questions INTEGER DEFAULT 0
-)";
-$dbh->exec($createInfoTableQuery);
-
 // Переменные для хранения значений полей
 $testName = $question = $option1 = $option2 = $option3 = $correctAnswer = '';
 
-// Получение текущего значения questions
-if (isset($_POST['test_name'])) {
-    $testName = $_POST['test_name'];
-
-    $getQuestionsQuery = "SELECT questions FROM info WHERE test_name = ?";
-    $stmt = $dbh->prepare($getQuestionsQuery);
-    $stmt->execute([$testName]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $currentQuestions = $row['questions'];
-}
-
 // Обработка нажатия кнопки "Добавить вопрос"
 if (isset($_POST['add_question'])) {
-    // Увеличение значения questions
-    $currentQuestions++;
+    // Получение значения поля test_name
+    $testName = $_POST['test_name'];
 
-    // Обновление значения questions в таблице info
-    $updateQuestionsQuery = "UPDATE info SET questions = ? WHERE test_name = ?";
-    $stmt = $dbh->prepare($updateQuestionsQuery);
-    $stmt->execute([$currentQuestions, $testName]);
+    // Подготовка SQL-запроса для увеличения счетчика quantity
+    $increaseQuantityQuery = "UPDATE quantity SET quantity = quantity + 1 WHERE test_name = ?";
+    $stmt = $dbh->prepare($increaseQuantityQuery);
+
+    // Выполнение SQL-запроса с передачей значения test_name через параметр
+    $stmt->execute([$testName]);
 
     // Остальной код для добавления вопроса в таблицу tests
     $question = $_POST['question'];
@@ -67,18 +51,6 @@ if (isset($_POST['add_question'])) {
 
     // Очистка полей формы (кроме поля "Название теста")
     $question = $option1 = $option2 = $option3 = $correctAnswer = '';
-}
-
-// Обработка нажатия кнопки "Выход"
-if (isset($_POST['exit'])) {
-    // Обновление значения questions в таблице info
-    $updateQuestionsQuery = "UPDATE info SET questions = ? WHERE test_name = ?";
-    $stmt = $dbh->prepare($updateQuestionsQuery);
-    $stmt->execute([$currentQuestions, $testName]);
-
-    // Очистка полей формы
-    $testName = '';
-    $currentQuestions = 0;
 }
 ?>
 <!DOCTYPE html>
@@ -399,54 +371,56 @@ text-align: center;
 
         </style>
     </head>
-<body>
-    <div class="v1_111">
-        <div class="v1_112"></div>
-        <div class="v1_113"></div>
-        <div class="v1_114"></div>
-        <span class="name">Название теста:</span>
-        <div class="box_name"></div>
-        <span class="v1_115">Ответ 3:</span>
-        <div class="v1_116"></div>
-        <span class="v1_117">Вопрос:</span>
-        <div class="v1_118"></div>
-        <span class="v1_119">Правильный ответ:</span>
-        <div class="v1_120"></div>
-        <span class="v1_121">Ответ 1:</span>
-        <div class="v1_122"></div>
-        <span class="v1_123">Ответ 2:</span>
-        <div class="v1_124"></div>
-        <span class="v1_125">Далее</span>
-        <div class="v1_126"></div>
-        <span class="v1_127">Выход</span>
-        <div class="v1_128"></div>
+    <body>
+        <div class="v1_111">
+            <div class="v1_112"></div>
+            <div class="v1_113"></div>
+            <div class="v1_114"></div>
+            <span class="name">Название теста:</span>
+            <div class="box_name"></div>
+            <span class="v1_115">Ответ 3:</span>
+            <div class="v1_116"></div>
+            <span class="v1_117">Вопрос:</span>
+            <div class="v1_118"></div>
+            <span class="v1_119">Правильный ответ:</span>
+            <div class="v1_120"></div>
+            <span class="v1_121">Ответ 1:</span>
+            <div class="v1_122"></div>
+            <span class="v1_123">Ответ 2:</span>
+            <div class="v1_124"></div>
+            <span class="v1_125">Далее</span>
+            <div class="v1_126"></div>
+            <span class="v1_127">Выход</span>
+            <div class="v1_128"></div>
         <form method="post" action="">
-            <div class="name_test">   
-                <input style="border-radius: 18px; width: 697px;height: 44px;background: transparent;border: none;" type="text" name="test_name" value="<?php echo $testName; ?>"><br>
-            </div>
-            <div class="question">
-                <input style="border-radius: 18px; width: 497px;height: 44px;background: transparent;border: none;" type="text" name="question" value="<?php echo $question;?>"><br>
-            </div>
-            <div class="first_answer">
-                <input style="border-radius: 18px; width: 491px;height: 44px;background: transparent;border: none;" type="text" name="option1" value="<?php echo $option1; ?>"><br>
-            </div>
-            <div class="second_answer">
-                <input style="border-radius: 18px; width: 491px;height: 44px;background: transparent;border: none;" type="text" name="option2" value="<?php echo $option2; ?>"><br>
-            </div>
-            <div class="third_answer">
-                <input style="border-radius: 18px; width: 490px;height: 44px;background: transparent;border: none;" type="text" name="option3" value="<?php echo $option3; ?>"><br>
-            </div>
-            <div class="correct_answer">
-                <input style="border-radius: 18px; width: 239px;height: 44px;background: transparent;border: none;" type="text" name="correct_answer" value="<?php echo $correctAnswer; ?>"><br>
-            </div>
-            <div class="next">
-                <input style="background: transparent;border:none; " type="submit" name="add_question" value="Далее"><br>
-            </div>
-            <div class="exit">
-                <input style="background: transparent;border:none;" type="submit" name="exit" value="Выход"><br>
-            </div>
-        </form>
-        <span class="questions"><?php echo $currentQuestions; ?></span>
+    <div class="name_test">   
+        <input style="border-radius: 18px; width: 697px;height: 44px;background: transparent;border: none;" type="text" name="test_name" value="<?php echo $testName; ?>"><br>
     </div>
-</body>
+    <div class="question">
+        <input style="border-radius: 18px; width: 497px;height: 44px;background: transparent;border: none;" type="text" name="question" value="<?php echo $question;?>"><br>
+    </div>
+    <div class="first_answer">
+        <input style="border-radius: 18px; width: 491px;height: 44px;background: transparent;border: none;" type="text" name="option1" value="<?php echo $option1; ?>"><br>
+    </div>
+    <div class="second_answer">
+        <input style="border-radius: 18px; width: 491px;height: 44px;background: transparent;border: none;" type="text" name="option2" value="<?php echo $option2; ?>"><br>
+    </div>
+    <div class="third_answer">
+        <input style="border-radius: 18px; width: 490px;height: 44px;background: transparent;border: none;" type="text" name="option3" value="<?php echo $option3; ?>"><br>
+    </div>
+    
+    <div class="correct_answer">
+        <input style="border-radius: 18px; width: 239px;height: 44px;background: transparent;border: none;" type="text" name="correct_answer" value="<?php echo $correctAnswer; ?>"><br>
+    </div>
+
+    <div class="next">
+        <input style="width: 156px;height: 61px;border-radius: 20px;background: transparent;border: none;" type="submit" name="add_question" value="">
+    </div>
+    <div class="out">
+        <input style="width: 156px;height: 61px;border-radius: 20px;background: transparent;border: none;"
+            type="button"onclick="location.href='/PD/постгри/тест/Нач стр/index.php'" >
+    </div>
+            </form>
+        </div>
+    </body>
 </html>
