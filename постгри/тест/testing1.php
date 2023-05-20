@@ -384,15 +384,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $answer = isset($_POST['answer']) ? $_POST['answer'] : '';
     $testName = isset($_POST['testName']) ? $_POST['testName'] : '';
     $question = isset($_POST['question']) ? $_POST['question'] : '';
+    $rightAnswer = isset($_POST['rightAnswer']) ? $_POST['rightAnswer'] : '';
 
     try {
-        // Вставка ответа пользователя, test_name, question и username в базу данных
-        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, username) VALUES (:answer, :test_name, :question, :username)");
+        // Вставка ответа пользователя, test_name, question, right_answer и username в базу данных
+        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, username) VALUES (:answer, :test_name, :question, :right_answer, :username)");
         $stmt->bindParam(':answer', $answer);
         $stmt->bindParam(':test_name', $testName);
         $stmt->bindParam(':question', $question);
+        $stmt->bindParam(':right_answer', $rightAnswer);
         $stmt->bindParam(':username', $username);
-        
 
         $stmt->execute();
 
@@ -401,8 +402,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo 'Ошибка сохранения ответа: ' . $e->getMessage();
     }
 }
-
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -420,24 +421,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo '<input type="hidden" name="currentRowIndex" value="' . ($currentRowIndex + 1) . '">';
             echo '<input type="hidden" name="testName" value="' . htmlspecialchars($testName) . '">';
             echo '<input type="hidden" name="question" value="' . htmlspecialchars($row['question']) . '">';
+            echo '<input type="hidden" name="rightAnswer" value="' . htmlspecialchars($row['correct_answer']) . '">';
             echo '<input class="correct_answer" style="border-radius: 18px; width: 239px;height: 44px;background: transparent;border: none;" type="text" name="answer" value="">';
             echo '<input class="next" style="width: 156px;height: 61px;border-radius: 20px;background: transparent;border: none;" type="submit" name="submit_answer" value="">';
-echo '</form>';
-echo '<br>';
-} else {
-echo '<script>window.location.href = "/PD/постгри/тест/counter.php";</script>'; // Замените "другая_страница.php" на URL другой страницы
-exit();
-}
-?>
-<a class="name_test"><?php echo '<td>' . $row['test_name'] . '</td>'; ?></a>
-<a class="question"><?php echo '<td>' . $row['question'] . '</td>'; ?></a>
-<a class="first_answer"><?php echo '<td>' . $row['option1'] . '</td>'; ?>.</a>
-<a class="second_answer"><?php echo '<td>' . $row['option2'] . '</td>'; ?></a>
-<a class="third_answer"><?php echo '<td>' . $row['option3'] . '</td>'; ?></a>
-<div class="out">
-<input style="width: 156px;height: 61px;border-radius: 20px;background: transparent;border: none;" type="button" onclick="location.href='index_lk_student.php'">
-</div>
-</form>
-
+            echo '</form>';
+            echo '<br>';
+        } else {
+            echo '<script>window.location.href = "/PD/постгри/тест/counter.php";</script>'; // перенаправлнение на другую страницу после последнего вопроса
+            exit();
+        }
+        ?>
+        <a class="name_test"><?php echo '<td>' . $row['test_name'] . '</td>'; ?></a>
+        <a class="question"><?php echo '<td>' . $row['question'] . '</td>'; ?></a>
+        <a class="first_answer"><?php echo '<td>' . $row['option1'] . '</td>'; ?>.</a>
+        <a class="second_answer"><?php echo '<td>' . $row['option2'] . '</td>'; ?></a>
+        <a class="third_answer"><?php echo '<td>' . $row['option3'] . '</td>'; ?></a>
+        <div class="out">
+            <input style="width: 156px;height: 61px;border-radius: 20px;background: transparent;border: none;" type="button" onclick="location.href='index_lk_student.php'">
+        </div>
+    </form>
 </body>
 </html>
+

@@ -201,6 +201,42 @@ top: 353px;
 background: #C1C1C1;
 border-radius: 20px;
         }
+.box_name_text{
+position: absolute;
+width: 419px;
+height: 47px;
+left: 455px;
+top: 284px;
+font-family: 'Forum';
+font-style: normal;
+font-weight: 400;
+font-size: 25px;
+line-height: 30px;
+        }
+.box_departament_text{
+position: absolute;
+width: 419px;
+height: 47px;
+left: 455px;
+top: 363px;
+font-family: 'Forum';
+font-style: normal;
+font-weight: 400;
+font-size: 25px;
+line-height: 30px;
+        }
+.box_page_text{
+position: absolute;
+width: 419px;
+height: 47px;
+left: 455px;
+top: 440px;
+font-family: 'Forum';
+font-style: normal;
+font-weight: 400;
+font-size: 25px;
+line-height: 30px;
+        }
     </style>
 </head>
 <?php
@@ -255,11 +291,14 @@ $age = $result['age'];
     <div class = "title_result">Результаты</div>
     <div class = "title_out"><a href="/PD/постгри/тест/Нач стр/index.php">Выход</a></div>
     <div class = "title_name">Ф.И.О.:</div>
-        <div class = "box_name"><?php echo $full_name; ?></div>
+        <div class = "box_name"></div>
+    <div class="box_name_text"><?php echo $full_name; ?></div>
     <div class = "title_departament">Кафедра:</div>
-        <div class = "box_departament"><?php echo $division; ?></div>
+        <div class = "box_departament"></div>
+    <div class="box_departament_text"><?php echo $division; ?></div>
     <div class = "title_page">Возраст:</div>
-        <div class = "box_page"><?php echo $age; ?></div>
+        <div class = "box_page"></div>
+    <div class="box_page_text"><?php echo $age; ?></div>
 </body>
 </html>
 

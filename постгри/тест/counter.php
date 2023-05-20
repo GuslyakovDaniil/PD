@@ -1,65 +1,41 @@
 <?php
-session_start(); // Начало сессии
 
-// Шаг 1: Подключение к базе данных
-$dbHost = 'localhost';
-$dbName = 'testingsystem';
-$dbUser = 'postgres';
-$dbPass = 'mysql';
+// Установка параметров подключения к базе данных
+$dbhost = 'localhost';
+$dbname = 'testingsystem';
+$dbuser = 'postgres';
+$dbpass = 'mysql';
 
-try {
-    $pdo = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Ошибка подключения к базе данных: " . $e->getMessage());
-}
+// Подключение к базе данных
+$db = new PDO("pgsql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
 
-// Шаг 2: Получение значения поля "correct_answer" из таблицы "tests"
-$sessionUsername = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+// Получение значения параметра test_name из GET-запроса или установка пустого значения
 $testName = isset($_GET['testName']) ? $_GET['testName'] : '';
 
-$sql = "SELECT correct_answer FROM tests WHERE test_name = :testName";
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':testName', $testName);
-$stmt->execute();
+// Получение значения параметра username из сессии или установка пустого значения
+session_start();
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
-if ($stmt->rowCount() > 0) {
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $correctAnswer = $row["correct_answer"];
-} else {
-    // Обработка случая, если запись не найдена
-    $correctAnswer = null;
-}
+// Инициализация счетчиков
+$correctAnswersCount = 0;
+$totalRowsCount = 0;
 
-// Шаг 3: Получение значения поля "answer" из таблицы "results" и подсчет правильных ответов и общего количества вопросов
-$counterCorrectAnswers = 0;
-$counterQuestions = 0;
+// Получение и сравнение полей right_answer и answer из таблицы results
+$query = $db->prepare("SELECT right_answer, answer FROM results WHERE test_name = :testName AND username = :username");
+$query->bindParam(':testName', $testName);
+$query->bindParam(':username', $username);
+$query->execute();
 
-$sql = "SELECT answer FROM results WHERE test_name = :testName";
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':testName', $testName);
-$stmt->execute();
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $totalRowsCount++;
 
-if ($stmt->rowCount() > 0) {
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $counterQuestions++;
-
-        $answer = $row["answer"];
-        if ($answer == $correctAnswer) {
-            $counterCorrectAnswers++;
-        }
+    if ($row['right_answer'] === $row['answer']) {
+        $correctAnswersCount++;
     }
 }
 
-// Шаг 4: Сохранение результатов в таблице "student_result"
-$sql = "INSERT INTO student_result (username, result, questions) VALUES (:sessionUsername, :counterCorrectAnswers, :counterQuestions)";
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':sessionUsername', $sessionUsername);
-$stmt->bindParam(':counterCorrectAnswers', $counterCorrectAnswers);
-$stmt->bindParam(':counterQuestions', $counterQuestions);
-$stmt->execute();
+// Вывод результатов
+echo "Количество правильных ответов: $correctAnswersCount<br>";
+echo "Общее количество строк: $totalRowsCount";
 
-// Шаг 5: Вывод результатов на HTML страницу
-echo "Количество правильных ответов: " . $counterCorrectAnswers . "<br>";
-echo "Общее количество вопросов: " . $counterQuestions;
 ?>
