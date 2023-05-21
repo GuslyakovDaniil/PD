@@ -166,7 +166,7 @@ left: 587px;
             <div class="v1_175"></div>
             <form method="get" action="counter.php">
     <div class="inp_up">
-        <input style="border-radius: 18px; width: 356px; height: 58px; background: transparent; border: none;" type="text" id="testName" name="testName" required><br><br>
+        <input style="border-radius: 18px; width: 356px; height: 58px; background: transparent; border: none;" type="text" id="testName1" name="testName" required><br><br>
     </div>
     <input type="submit" class="v1_176" value="Поиск">
 </form>

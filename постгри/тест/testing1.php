@@ -1,6 +1,15 @@
 <?php
 session_start(); // Начало сессии
 
+// Получение значения параметра testName из GET-запроса
+$testName = isset($_GET['testName']) ? $_GET['testName'] : '';
+
+// Получение значения параметра username из сессии
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+
+// Запоминание значений в сессию
+$_SESSION['testName'] = $testName;
+$_SESSION['username'] = $username;
 ?>
 <!DOCTYPE html>
 <html>
@@ -400,6 +409,7 @@ try {
 
 // Получение переданного значения "testName" из предыдущей страницы
 $testName = isset($_GET['testName']) ? $_GET['testName'] : '';
+
 
 // Получение текущего индекса строки
 $currentRowIndex = isset($_POST['currentRowIndex']) ? $_POST['currentRowIndex'] : 0;
