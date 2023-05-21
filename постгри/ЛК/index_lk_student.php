@@ -337,6 +337,7 @@ try {
     </div>
     <div class="title_name">Ф.И.О.:</div>
     <div class="box_name"></div>
+
     <div class="box_name_text"><?php echo $full_name; ?></div>
     <div class="title_departament">Группа:</div>
     <div class="box_departament"></div>

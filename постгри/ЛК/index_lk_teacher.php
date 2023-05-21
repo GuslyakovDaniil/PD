@@ -242,6 +242,12 @@ line-height: 30px;
 <?php
 // Предполагая, что сессия уже запущена
 session_start();
+// Получение значения параметра username из сессии
+$division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
+
+
+// Запоминание значений в сессию
+$_SESSION['division'] = $division;
 
 // Получение значения username из сессии
 $username = $_SESSION['username'];
@@ -288,7 +294,7 @@ $age = $result['age'];
         <div class = "logo"></div>
     </div>
     <div class = "title_create_test"><a href="/PD/постгри/Готово/index_creat_test.php">Создание теста</a></div>
-    <div class = "title_result">Результаты</div>
+    <div class = "title_result"><a href="/PD/постгри/тест/search_teacher.php">Результаты</a></div>
     <div class = "title_out"><a href="/PD/постгри/тест/Нач стр/index.php">Выход</a></div>
     <div class = "title_name">Ф.И.О.:</div>
         <div class = "box_name"></div>

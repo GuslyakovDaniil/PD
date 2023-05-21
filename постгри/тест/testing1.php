@@ -1,6 +1,57 @@
 <?php
 session_start(); // Начало сессии
 
+// Получение значения параметра testName из GET-запроса
+$testName = isset($_GET['testName']) ? $_GET['testName'] : '';
+
+// Получение значения параметра username из сессии
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+
+// Получение значения параметра division из сессии
+$division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
+
+// Запоминание значений в сессию
+$_SESSION['division'] = $division;
+
+// Запоминание значений в сессию
+$_SESSION['testName'] = $testName;
+$_SESSION['username'] = $username;
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
+        <link href="./css/main.css" rel="stylesheet" />
+        <title>Document</title>
+        <style>
+
+        </style>
+    </head>
+    <body>
+        <div class="v1_111">
+            <div class="v1_112"></div>
+            <div class="v1_113"></div>
+            <div class="v1_114"></div>
+            <span class="name">Название теста:</span>
+            <div class="box_name"></div>
+            <span class="v1_115">Ответ 3:</span>
+            <div class="v1_116"></div>
+            <span class="v1_117">Вопрос:</span>
+            <div class="v1_118"></div>
+            <span class="v1_119">Правильный ответ:</span>
+            <div class="v1_120"></div>
+            <span class="v1_121">Ответ 1:</span>
+            <div class="v1_122"></div>
+            <span class="v1_123">Ответ 2:</span>
+            <div class="v1_124"></div>
+            <span class="v1_125">Далее</span>
+            <div class="v1_126"></div>
+            <a  href="/PD/постгри/ЛК/index_lk_student.php" class="v1_127">Выход</a>
+            <div class="v1_128"></div>
+            <form method="post" action="">
+            <?php
+session_start(); // Начало сессии
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -348,7 +399,7 @@ text-align: center;
             <a  href="/PD/постгри/ЛК/index_lk_student.php" class="v1_127">Выход</a>
             <div class="v1_128"></div>
             <form method="post" action="">
-            <?php
+            <?php   
 // Подключение к базе данных
 $dbHost = 'localhost';
 $dbName = 'testingsystem';
@@ -363,13 +414,16 @@ try {
 }
 
 // Получение переданного значения "testName" из предыдущей страницы
-$testName = isset($_GET['testName']) ? $_GET['testName'] : '';
+$testName = isset($_SESSION['testName']) ? $_SESSION['testName'] : '';
 
 // Получение текущего индекса строки
 $currentRowIndex = isset($_POST['currentRowIndex']) ? $_POST['currentRowIndex'] : 0;
 
 // Получение имени пользователя из сессии
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+
+// Получение значения параметра division из сессии
+$division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
 
 // Получение данных из базы данных для указанного теста
 $stmt = $pdo->prepare("SELECT * FROM tests WHERE test_name = :testName LIMIT 1 OFFSET :offset");
@@ -386,18 +440,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $question = isset($_POST['question']) ? $_POST['question'] : '';
     $rightAnswer = isset($_POST['rightAnswer']) ? $_POST['rightAnswer'] : '';
 
+    // Сравнение значений полей и установка значения поля "is_correct"
+    $isCorrect = ($answer === $rightAnswer) ? 1 : 0;
+
     try {
-        // Вставка ответа пользователя, test_name, question, right_answer и username в базу данных
-        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, username) VALUES (:answer, :test_name, :question, :right_answer, :username)");
+        // Вставка ответа пользователя, test_name, question, right_answer, is_correct, username и division в базу данных
+        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, is_correct, username, division) VALUES (:answer, :test_name, :question, :right_answer, :is_correct, :username, :division)");
         $stmt->bindParam(':answer', $answer);
         $stmt->bindParam(':test_name', $testName);
         $stmt->bindParam(':question', $question);
         $stmt->bindParam(':right_answer', $rightAnswer);
+        $stmt->bindParam(':is_correct', $isCorrect);
         $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':division', $division);
 
         $stmt->execute();
 
-        echo 'Ответ сохранен в базе данных.';
     } catch (PDOException $e) {
         echo 'Ошибка сохранения ответа: ' . $e->getMessage();
     }
@@ -407,11 +465,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
-    <link href="./css/main.css" rel="stylesheet" />
-    <title>Document</title>
-    <style>
-    </style>
 </head>
 <body>
     <form method="post" action="">
@@ -427,7 +480,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo '</form>';
             echo '<br>';
         } else {
-            echo '<script>window.location.href = "/PD/постгри/тест/counter.php";</script>'; // перенаправлнение на другую страницу после последнего вопроса
+            echo '<script>window.location.href = "/PD/постгри/тест/counter.php";</script>'; // перенаправление на другую страницу после последнего вопроса
             exit();
         }
         ?>
@@ -442,4 +495,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 </body>
 </html>
-
