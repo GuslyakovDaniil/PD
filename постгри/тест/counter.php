@@ -13,27 +13,37 @@ try {
     die("Ошибка подключения к базе данных: " . $e->getMessage());
 }
 
-// Получение значений параметров test_name и username
+// Получение значений параметров test_name и username из сессии
 $testName = isset($_SESSION['testName']) ? $_SESSION['testName'] : '';
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
 try {
     // Подготовка SQL-запроса для подсчета количества строк
-    $sql = "SELECT COUNT(*) as count FROM results WHERE test_name = :testName AND username = :username AND is_correct = :isCorrect";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':testName', $testName, PDO::PARAM_STR);
-    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $countSql = "SELECT COUNT(*) as count FROM results WHERE test_name = :testName AND username = :username AND is_correct = :isCorrect";
+    $countStmt = $pdo->prepare($countSql);
+    $countStmt->bindParam(':testName', $testName, PDO::PARAM_STR);
+    $countStmt->bindParam(':username', $username, PDO::PARAM_STR);
     $isCorrect = 1;
-    $stmt->bindParam(':isCorrect', $isCorrect, PDO::PARAM_INT);
+    $countStmt->bindParam(':isCorrect', $isCorrect, PDO::PARAM_INT);
 
     // Выполнение запроса
-    $stmt->execute();
+    $countStmt->execute();
 
     // Получение результата запроса
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $countResult = $countStmt->fetch(PDO::FETCH_ASSOC);
 
     // Вывод количества строк на страницу
-    echo "Количество строк таблицы results: " . $result['count'];
+    echo "Количество строк таблицы results: " . $countResult['count'];
+
+    // Сохранение количества строк, username и test_name в таблице student_result
+    $saveSql = "INSERT INTO student_result (result, username, test_name) VALUES (:result, :username, :testName)";
+    $saveStmt = $pdo->prepare($saveSql);
+    $saveStmt->bindParam(':result', $countResult['count'], PDO::PARAM_INT);
+    $saveStmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $saveStmt->bindParam(':testName', $testName, PDO::PARAM_STR);
+    $saveStmt->execute();
+
+    echo "Результат сохранен в таблице student_result.";
 } catch (PDOException $e) {
     die("Ошибка выполнения запроса: " . $e->getMessage());
 }
