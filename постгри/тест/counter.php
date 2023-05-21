@@ -1,41 +1,33 @@
 <?php
-
-// Установка параметров подключения к базе данных
-$dbhost = 'localhost';
-$dbname = 'testingsystem';
-$dbuser = 'postgres';
-$dbpass = 'mysql';
+session_start(); // Начало сессии
 
 // Подключение к базе данных
-$db = new PDO("pgsql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
+$dbHost = 'localhost';
+$dbName = 'testingsystem';
+$dbUser = 'postgres';
+$dbPass = 'mysql';
 
-// Получение значения параметра test_name из GET-запроса или установка пустого значения
-$testName = isset($_GET['testName']) ? $_GET['testName'] : '';
+try {
+    $pdo = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Получение значения параметра username из сессии или установка пустого значения
-session_start();
-$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+    // Получение значения переменной $username
+    $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
-// Инициализация счетчиков
-$correctAnswersCount = 0;
-$totalRowsCount = 0;
+    // Получение значения переменной $testName
+    $testName = isset($_GET['testName']) ? $_GET['testName'] : '';
 
-// Получение и сравнение полей right_answer и answer из таблицы results
-$query = $db->prepare("SELECT right_answer, answer FROM results WHERE test_name = :testName AND username = :username");
-$query->bindParam(':testName', $testName);
-$query->bindParam(':username', $username);
-$query->execute();
+    // Подготовка и выполнение SQL-запроса
+    $sql = "SELECT COUNT(*) AS count FROM results WHERE username = :username AND test_name = :testName AND is_correct = '1'";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->bindParam(':testName', $testName, PDO::PARAM_STR);
+    $stmt->execute();
 
-while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-    $totalRowsCount++;
-
-    if ($row['right_answer'] === $row['answer']) {
-        $correctAnswersCount++;
-    }
+    // Получение результата и вывод на экран
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    echo "Количество строк с username=$username, testName=$testName и is_correct=1: " . $result['count'];
+} catch (PDOException $e) {
+    die("Ошибка подключения к базе данных: " . $e->getMessage());
 }
-
-// Вывод результатов
-echo "Количество правильных ответов: $correctAnswersCount<br>";
-echo "Общее количество строк: $totalRowsCount";
-
 ?>

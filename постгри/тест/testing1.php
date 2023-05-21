@@ -9,6 +9,42 @@ session_start(); // Начало сессии
         <link href="./css/main.css" rel="stylesheet" />
         <title>Document</title>
         <style>
+
+        </style>
+    </head>
+    <body>
+        <div class="v1_111">
+            <div class="v1_112"></div>
+            <div class="v1_113"></div>
+            <div class="v1_114"></div>
+            <span class="name">Название теста:</span>
+            <div class="box_name"></div>
+            <span class="v1_115">Ответ 3:</span>
+            <div class="v1_116"></div>
+            <span class="v1_117">Вопрос:</span>
+            <div class="v1_118"></div>
+            <span class="v1_119">Правильный ответ:</span>
+            <div class="v1_120"></div>
+            <span class="v1_121">Ответ 1:</span>
+            <div class="v1_122"></div>
+            <span class="v1_123">Ответ 2:</span>
+            <div class="v1_124"></div>
+            <span class="v1_125">Далее</span>
+            <div class="v1_126"></div>
+            <a  href="/PD/постгри/ЛК/index_lk_student.php" class="v1_127">Выход</a>
+            <div class="v1_128"></div>
+            <form method="post" action="">
+            <?php
+session_start(); // Начало сессии
+
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
+        <link href="./css/main.css" rel="stylesheet" />
+        <title>Document</title>
+        <style>
             * {
   box-sizing: border-box;
 }
@@ -386,13 +422,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $question = isset($_POST['question']) ? $_POST['question'] : '';
     $rightAnswer = isset($_POST['rightAnswer']) ? $_POST['rightAnswer'] : '';
 
+    // Сравнение значений полей и установка значения поля "is_correct"
+    $isCorrect = ($answer === $rightAnswer) ? 1 : 0;
+
     try {
-        // Вставка ответа пользователя, test_name, question, right_answer и username в базу данных
-        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, username) VALUES (:answer, :test_name, :question, :right_answer, :username)");
+        // Вставка ответа пользователя, test_name, question, right_answer, is_correct и username в базу данных
+        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, is_correct, username) VALUES (:answer, :test_name, :question, :right_answer, :is_correct, :username)");
         $stmt->bindParam(':answer', $answer);
         $stmt->bindParam(':test_name', $testName);
         $stmt->bindParam(':question', $question);
         $stmt->bindParam(':right_answer', $rightAnswer);
+        $stmt->bindParam(':is_correct', $isCorrect);
         $stmt->bindParam(':username', $username);
 
         $stmt->execute();
@@ -406,12 +446,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html>
-<head>
-    <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
-    <link href="./css/main.css" rel="stylesheet" />
-    <title>Document</title>
-    <style>
-    </style>
 </head>
 <body>
     <form method="post" action="">
@@ -442,4 +476,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 </body>
 </html>
-
