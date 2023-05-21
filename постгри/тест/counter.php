@@ -1,5 +1,12 @@
 <?php
 session_start(); // Начало сессии
+
+// Получение значения параметра division из запроса
+$division = isset($_GET['division']) ? $_GET['division'] : '';
+
+// Запоминание значения в сессию
+$_SESSION['division'] = $division;
+
 // Подключение к базе данных
 $dbHost = 'localhost';
 $dbName = 'testingsystem';
@@ -47,12 +54,13 @@ try {
     echo "Количество строк таблицы results: " . $countResult['count'];
 
     // Сохранение количества строк, username, test_name и значения поля questions в таблице student_result
-    $saveSql = "INSERT INTO student_result (result, username, test_name, questions) VALUES (:result, :username, :testName, :questions::varchar)";
+    $saveSql = "INSERT INTO student_result (result, username, test_name, questions, division) VALUES (:result, :username, :testName, :questions::varchar, :division)";
     $saveStmt = $pdo->prepare($saveSql);
     $saveStmt->bindParam(':result', $countResult['count'], PDO::PARAM_INT);
     $saveStmt->bindParam(':username', $username, PDO::PARAM_STR);
     $saveStmt->bindParam(':testName', $testName, PDO::PARAM_STR);
     $saveStmt->bindParam(':questions', $infoResult['questions'], PDO::PARAM_INT); // Преобразование в тип integer
+    $saveStmt->bindParam(':division', $division, PDO::PARAM_STR); // Сохранение значения division
     $saveStmt->execute();
 
     echo "Результат сохранен в таблице student_result.";

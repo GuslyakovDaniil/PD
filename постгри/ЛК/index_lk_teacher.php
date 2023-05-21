@@ -242,6 +242,12 @@ line-height: 30px;
 <?php
 // Предполагая, что сессия уже запущена
 session_start();
+// Получение значения параметра username из сессии
+$division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
+
+
+// Запоминание значений в сессию
+$_SESSION['division'] = $division;
 
 // Получение значения username из сессии
 $username = $_SESSION['username'];

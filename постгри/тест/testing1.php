@@ -7,6 +7,12 @@ $testName = isset($_GET['testName']) ? $_GET['testName'] : '';
 // Получение значения параметра username из сессии
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
+// Получение значения параметра division из сессии
+$division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
+
+// Запоминание значений в сессию
+$_SESSION['division'] = $division;
+
 // Запоминание значений в сессию
 $_SESSION['testName'] = $testName;
 $_SESSION['username'] = $username;
@@ -394,7 +400,6 @@ text-align: center;
             <div class="v1_128"></div>
             <form method="post" action="">
             <?php   
-                
 // Подключение к базе данных
 $dbHost = 'localhost';
 $dbName = 'testingsystem';
@@ -417,12 +422,16 @@ $currentRowIndex = isset($_POST['currentRowIndex']) ? $_POST['currentRowIndex'] 
 // Получение имени пользователя из сессии
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
+// Получение значения параметра division из сессии
+$division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
+
 // Получение данных из базы данных для указанного теста
 $stmt = $pdo->prepare("SELECT * FROM tests WHERE test_name = :testName LIMIT 1 OFFSET :offset");
 $stmt->bindParam(':testName', $testName);
 $stmt->bindParam(':offset', $currentRowIndex, PDO::PARAM_INT);
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
 // Обработка отправленной формы
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Получение данных из формы
@@ -436,14 +445,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Вставка ответа пользователя, test_name, question, right_answer, is_correct, username и division в базу данных
-        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, is_correct, username) VALUES (:answer, :test_name, :question, :right_answer, :is_correct, :username)");
+        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, is_correct, username, division) VALUES (:answer, :test_name, :question, :right_answer, :is_correct, :username, :division)");
         $stmt->bindParam(':answer', $answer);
         $stmt->bindParam(':test_name', $testName);
         $stmt->bindParam(':question', $question);
         $stmt->bindParam(':right_answer', $rightAnswer);
         $stmt->bindParam(':is_correct', $isCorrect);
         $stmt->bindParam(':username', $username);
-        
+        $stmt->bindParam(':division', $division);
 
         $stmt->execute();
 
