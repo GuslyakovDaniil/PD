@@ -264,7 +264,7 @@ try {
     $query = "SELECT full_name, division, age FROM users WHERE username = :username";
     $stmt = $conn->prepare($query);
     $stmt->bindParam(':username', $username);
-    
+
     // Выполнение запроса
     $stmt->execute();
 
@@ -279,26 +279,70 @@ try {
 $full_name = $result['full_name'];
 $division = $result['division'];
 $age = $result['age'];
+
+try {
+    // Подготовка SQL-запроса для получения изображения из таблицы "images"
+    $query = "SELECT image_data FROM images WHERE id = (SELECT MAX(id) FROM images)";
+    $stmt = $conn->prepare($query);
+
+    // Выполнение запроса
+    $stmt->execute();
+
+    // Получение результата
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo 'Ошибка выполнения запроса: ' . $e->getMessage();
+}
 ?>
+
+<html>
 <body>
-    <div class = "box_backgraund"></div>
-    <div class = "back_phone"></div>
-    <div class = "box"></div>
-    <div class = "box_logo">
-    <div class="avatar"></div>
-        <div class = "logo"></div>
+    <div class="box_backgraund"></div>
+    <div class="back_phone"></div>
+    <div class="box"></div>
+    <div class="box_logo">
+    <div class="avatar">
+    <?php
+    // Проверка наличия изображения
+    if ($result && !empty($result['image_data'])) {
+        // Отображение изображения
+        $imageData = $result['image_data'];
+
+        // Преобразование ресурса в строку
+        $imageString = stream_get_contents($imageData);
+
+        // Кодирование изображения в base64
+        $base64Image = base64_encode($imageString);
+
+        // Определение класса аватара и добавление стилей
+        echo '<img class="avatar-image" src="data:image/jpeg;base64,' . $base64Image . '" alt="Аватар">';
+    }
+    ?>
+</div>
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+            <input type="file" name="images" accept="image/*">
+            <input type="submit" value="Загрузить">
+        </form>
     </div>
-    <div class="title_create_test"><a href="/PD/постгри/тест/seach_test_student.php">Прохождение теста</a></div>
-<div class="title_result">Результаты</div>
-<div class="title_out"><a href="/PD/постгри/тест/Нач стр/index.php">Выход</a></div>
-<div class="title_name">Ф.И.О.:</div>
-<div class="box_name"></div>
+        <div class="logo"></div>
+    </div>
+    <div class="title_create_test"><form action="upload.php" method="post" enctype="multipart/form-data">
+        <input type="file" name="images" accept="image/*">
+        <input type="submit" value="Загрузить">
+        <a href="/PD/постгри/тест/seach_test_student.php">Прохождение теста</a>
+    </div>
+    <div class="title_result">Результаты</div>
+    <div class="title_out">
+        <a href="/PD/постгри/тест/Нач стр/index.php">Выход</a>
+    </div>
+    <div class="title_name">Ф.И.О.:</div>
+    <div class="box_name"></div>
     <div class="box_name_text"><?php echo $full_name; ?></div>
-<div class="title_departament">Группа:</div>
-<div class="box_departament"></div>
+    <div class="title_departament">Группа:</div>
+    <div class="box_departament"></div>
     <div class="box_departament_text"><?php echo $division; ?></div>
-<div class="title_page">Возраст:</div>
-<div class="box_page"></div>
+    <div class="title_page">Возраст:</div>
+    <div class="box_page"></div>
     <div class="box_page_text"><?php echo $age; ?></div>
 </body>
 </html>
