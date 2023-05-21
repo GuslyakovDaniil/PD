@@ -18,6 +18,17 @@ $testName = isset($_SESSION['testName']) ? $_SESSION['testName'] : '';
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
 try {
+    // Подготовка SQL-запроса для выборки значения поля questions из таблицы info
+    $infoSql = "SELECT questions FROM info WHERE test_name = :testName";
+    $infoStmt = $pdo->prepare($infoSql);
+    $infoStmt->bindParam(':testName', $testName, PDO::PARAM_STR);
+
+    // Выполнение запроса
+    $infoStmt->execute();
+
+    // Получение результата запроса
+    $infoResult = $infoStmt->fetch(PDO::FETCH_ASSOC);
+
     // Подготовка SQL-запроса для подсчета количества строк
     $countSql = "SELECT COUNT(*) as count FROM results WHERE test_name = :testName AND username = :username AND is_correct = :isCorrect";
     $countStmt = $pdo->prepare($countSql);
@@ -35,12 +46,13 @@ try {
     // Вывод количества строк на страницу
     echo "Количество строк таблицы results: " . $countResult['count'];
 
-    // Сохранение количества строк, username и test_name в таблице student_result
-    $saveSql = "INSERT INTO student_result (result, username, test_name) VALUES (:result, :username, :testName)";
+    // Сохранение количества строк, username, test_name и значения поля questions в таблице student_result
+    $saveSql = "INSERT INTO student_result (result, username, test_name, questions) VALUES (:result, :username, :testName, :questions::varchar)";
     $saveStmt = $pdo->prepare($saveSql);
     $saveStmt->bindParam(':result', $countResult['count'], PDO::PARAM_INT);
     $saveStmt->bindParam(':username', $username, PDO::PARAM_STR);
     $saveStmt->bindParam(':testName', $testName, PDO::PARAM_STR);
+    $saveStmt->bindParam(':questions', $infoResult['questions'], PDO::PARAM_INT); // Преобразование в тип integer
     $saveStmt->execute();
 
     echo "Результат сохранен в таблице student_result.";
