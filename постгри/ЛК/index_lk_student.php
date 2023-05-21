@@ -289,7 +289,7 @@ $age = $result['age'];
         <div class = "logo"></div>
     </div>
     <div class="title_create_test"><a href="/PD/постгри/тест/seach_test_student.php">Прохождение теста</a></div>
-<div class="title_result">Результаты</div>
+<div class="title_result"><a href="/PD/постгри/тест/search_student.php">Результаты</a></div>
 <div class="title_out"><a href="/PD/постгри/тест/Нач стр/index.php">Выход</a></div>
 <div class="title_name">Ф.И.О.:</div>
 <div class="box_name"></div>

@@ -393,7 +393,8 @@ text-align: center;
             <a  href="/PD/постгри/ЛК/index_lk_student.php" class="v1_127">Выход</a>
             <div class="v1_128"></div>
             <form method="post" action="">
-            <?php
+            <?php   
+                
 // Подключение к базе данных
 $dbHost = 'localhost';
 $dbName = 'testingsystem';
@@ -408,8 +409,7 @@ try {
 }
 
 // Получение переданного значения "testName" из предыдущей страницы
-$testName = isset($_GET['testName']) ? $_GET['testName'] : '';
-
+$testName = isset($_SESSION['testName']) ? $_SESSION['testName'] : '';
 
 // Получение текущего индекса строки
 $currentRowIndex = isset($_POST['currentRowIndex']) ? $_POST['currentRowIndex'] : 0;
@@ -423,7 +423,6 @@ $stmt->bindParam(':testName', $testName);
 $stmt->bindParam(':offset', $currentRowIndex, PDO::PARAM_INT);
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
 // Обработка отправленной формы
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Получение данных из формы
@@ -432,31 +431,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $question = isset($_POST['question']) ? $_POST['question'] : '';
     $rightAnswer = isset($_POST['rightAnswer']) ? $_POST['rightAnswer'] : '';
 
-    // Получение значения поля division из таблицы users
-$stmt = $pdo->prepare("SELECT division FROM users WHERE username = :username");
-$stmt->bindParam(':username', $username);
-$stmt->execute();
-$userRow = $stmt->fetch(PDO::FETCH_ASSOC);
-
-$division = $userRow['division']; // Полученное значение division
-
     // Сравнение значений полей и установка значения поля "is_correct"
     $isCorrect = ($answer === $rightAnswer) ? 1 : 0;
 
     try {
         // Вставка ответа пользователя, test_name, question, right_answer, is_correct, username и division в базу данных
-$stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, is_correct, username, division) VALUES (:answer, :test_name, :question, :right_answer, :is_correct, :username, :division)");
-$stmt->bindParam(':answer', $answer);
-$stmt->bindParam(':test_name', $testName);
-$stmt->bindParam(':question', $question);
-$stmt->bindParam(':right_answer', $rightAnswer);
-$stmt->bindParam(':is_correct', $isCorrect);
-$stmt->bindParam(':username', $username);
-$stmt->bindParam(':division', $division);
+        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, is_correct, username) VALUES (:answer, :test_name, :question, :right_answer, :is_correct, :username)");
+        $stmt->bindParam(':answer', $answer);
+        $stmt->bindParam(':test_name', $testName);
+        $stmt->bindParam(':question', $question);
+        $stmt->bindParam(':right_answer', $rightAnswer);
+        $stmt->bindParam(':is_correct', $isCorrect);
+        $stmt->bindParam(':username', $username);
+        
 
-$stmt->execute();
+        $stmt->execute();
 
-        echo 'Ответ сохранен в базе данных.';
     } catch (PDOException $e) {
         echo 'Ошибка сохранения ответа: ' . $e->getMessage();
     }
@@ -465,6 +455,7 @@ $stmt->execute();
 
 <!DOCTYPE html>
 <html>
+<head>
 </head>
 <body>
     <form method="post" action="">
@@ -480,7 +471,7 @@ $stmt->execute();
             echo '</form>';
             echo '<br>';
         } else {
-            echo '<script>window.location.href = "/PD/постгри/тест/counter.php";</script>'; // перенаправлнение на другую страницу после последнего вопроса
+            echo '<script>window.location.href = "/PD/постгри/тест/counter.php";</script>'; // перенаправление на другую страницу после последнего вопроса
             exit();
         }
         ?>
