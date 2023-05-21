@@ -432,20 +432,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $question = isset($_POST['question']) ? $_POST['question'] : '';
     $rightAnswer = isset($_POST['rightAnswer']) ? $_POST['rightAnswer'] : '';
 
+    // Получение значения поля division из таблицы users
+$stmt = $pdo->prepare("SELECT division FROM users WHERE username = :username");
+$stmt->bindParam(':username', $username);
+$stmt->execute();
+$userRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$division = $userRow['division']; // Полученное значение division
+
     // Сравнение значений полей и установка значения поля "is_correct"
     $isCorrect = ($answer === $rightAnswer) ? 1 : 0;
 
     try {
-        // Вставка ответа пользователя, test_name, question, right_answer, is_correct и username в базу данных
-        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, is_correct, username) VALUES (:answer, :test_name, :question, :right_answer, :is_correct, :username)");
-        $stmt->bindParam(':answer', $answer);
-        $stmt->bindParam(':test_name', $testName);
-        $stmt->bindParam(':question', $question);
-        $stmt->bindParam(':right_answer', $rightAnswer);
-        $stmt->bindParam(':is_correct', $isCorrect);
-        $stmt->bindParam(':username', $username);
+        // Вставка ответа пользователя, test_name, question, right_answer, is_correct, username и division в базу данных
+$stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, is_correct, username, division) VALUES (:answer, :test_name, :question, :right_answer, :is_correct, :username, :division)");
+$stmt->bindParam(':answer', $answer);
+$stmt->bindParam(':test_name', $testName);
+$stmt->bindParam(':question', $question);
+$stmt->bindParam(':right_answer', $rightAnswer);
+$stmt->bindParam(':is_correct', $isCorrect);
+$stmt->bindParam(':username', $username);
+$stmt->bindParam(':division', $division);
 
-        $stmt->execute();
+$stmt->execute();
 
         echo 'Ответ сохранен в базе данных.';
     } catch (PDOException $e) {
