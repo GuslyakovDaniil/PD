@@ -1,8 +1,8 @@
 <?php
 session_start(); // Начало сессии
 
-// Получение значения параметра division из запроса
-$division = isset($_GET['division']) ? $_GET['division'] : '';
+// Получение значения параметра division из сессии
+$division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
 
 // Запоминание значения в сессию
 $_SESSION['division'] = $division;
@@ -68,6 +68,7 @@ try {
     die("Ошибка выполнения запроса: " . $e->getMessage());
 }
 ?>
+
 <style>
     .title_out{
 position: absolute;

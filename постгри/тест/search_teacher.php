@@ -17,7 +17,7 @@ if (isset($_POST['search'])) {
     $username = $_POST['username'];
     $division = $_POST['division'];
 
-    $query = "SELECT test_name, username, questions, result FROM student_result WHERE 1 = 1";
+    $query = "SELECT test_name, username, questions, result, division FROM student_result WHERE 1 = 1";
 
     if (!empty($division)) {
         $query .= " AND division = :division";
@@ -79,7 +79,8 @@ if (isset($_POST['search'])) {
                     <tr>
                         <th>Название теста</th>
                         <th>Имя пользователя</th>
-                        <th>Вопросы</th>
+                        <th>Группа</th>
+                        <th>Кол-во вопросов</th>
                         <th>Результат</th>
                     </tr>
                 </thead>
@@ -88,6 +89,7 @@ if (isset($_POST['search'])) {
                         <tr>
                             <td><?php echo $row['test_name']; ?></td>
                             <td><?php echo $row['username']; ?></td>
+                            <td><?php echo $row['division']; ?></td>
                             <td><?php echo $row['questions']; ?></td>
                             <td><?php echo $row['result']; ?></td>
                         </tr>

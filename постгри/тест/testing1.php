@@ -345,7 +345,7 @@ text-align: center;
             <div class="v1_112"></div>
             <div class="v1_113"></div>
             <div class="v1_114"></div>
-            <span class="name">Название теста:</span>
+            <span class="name"><?php echo $division ?></span>
             <div class="box_name"></div>
             <span class="v1_115">Ответ 3:</span>
             <div class="v1_116"></div>
@@ -387,6 +387,7 @@ text-align: center;
 
         // Получение значения параметра division из сессии
         $division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
+
 
         // Получение данных из базы данных для указанного теста
         $stmt = $pdo->prepare("SELECT * FROM tests WHERE test_name = :testName LIMIT 1 OFFSET :offset");
