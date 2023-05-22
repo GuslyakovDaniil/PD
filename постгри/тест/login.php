@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
             
     // Проверка наличия пользователя в базе данных
-    $stmt = $dbh->prepare("SELECT password, access_level FROM users WHERE username = :username LIMIT 1");
+    $stmt = $dbh->prepare("SELECT password, access_level, division FROM users WHERE username = :username LIMIT 1");
     $stmt->bindParam(':username', $username);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -30,24 +30,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Проверка пароля
         $hashedPassword = $row['password'];
         if (password_verify($password, $hashedPassword)) {
-            // Проверка уровня доступа
+            // Установка имени пользователя в сессии
+            $_SESSION['username'] = $username;
+            
+            // Сохранение значения division в сессии
+            $_SESSION['division'] = $row['division'];
+            
+            echo 'Вы успешно вошли на сайт.';
+            
+            // Редирект на защищенную страницу
             if ($row['access_level'] == 1) {
-                // Установка имени пользователя в сессии
-                $_SESSION['username'] = $username;
-                  
-                echo 'Вы успешно вошли на сайт.';
-                // Редирект на защищенную страницу
                 header('Location: /PD/постгри/ЛК/index_lk_teacher.php');
-                exit();
             } else {
-                // Установка имени пользователя в сессии
-                $_SESSION['username'] = $username;
-                          
-                echo 'Вы успешно вошли на сайт.';
-                // Редирект на защищенную страницу
                 header('Location: /PD/постгри/ЛК/index_lk_student.php');
-                exit();
             }
+            
+            exit();
         } else {
             echo 'Неверный пароль.';
         }

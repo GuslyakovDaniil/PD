@@ -11,46 +11,9 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 $division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
 
 // Запоминание значений в сессию
-$_SESSION['division'] = $division;
-
-// Запоминание значений в сессию
 $_SESSION['testName'] = $testName;
 $_SESSION['username'] = $username;
-?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
-        <link href="./css/main.css" rel="stylesheet" />
-        <title>Document</title>
-        <style>
-
-        </style>
-    </head>
-    <body>
-        <div class="v1_111">
-            <div class="v1_112"></div>
-            <div class="v1_113"></div>
-            <div class="v1_114"></div>
-            <span class="name">Название теста:</span>
-            <div class="box_name"></div>
-            <span class="v1_115">Ответ 3:</span>
-            <div class="v1_116"></div>
-            <span class="v1_117">Вопрос:</span>
-            <div class="v1_118"></div>
-            <span class="v1_119">Правильный ответ:</span>
-            <div class="v1_120"></div>
-            <span class="v1_121">Ответ 1:</span>
-            <div class="v1_122"></div>
-            <span class="v1_123">Ответ 2:</span>
-            <div class="v1_124"></div>
-            <span class="v1_125">Далее</span>
-            <div class="v1_126"></div>
-            <a  href="/PD/постгри/ЛК/index_lk_student.php" class="v1_127">Выход</a>
-            <div class="v1_128"></div>
-            <form method="post" action="">
-            <?php
-session_start(); // Начало сессии
+$_SESSION['division'] = $division;
 
 ?>
 <!DOCTYPE html>
@@ -396,71 +359,71 @@ text-align: center;
             <div class="v1_124"></div>
             <span class="v1_125">Далее</span>
             <div class="v1_126"></div>
-            <a  href="/PD/постгри/ЛК/index_lk_student.php" class="v1_127">Выход</a>
+            <div class="v1_127"><a href="/PD/постгри/тест/exit.php">Выход</a></div>
             <div class="v1_128"></div>
             <form method="post" action="">
             <?php   
-// Подключение к базе данных
-$dbHost = 'localhost';
-$dbName = 'testingsystem';
-$dbUser = 'postgres';
-$dbPass = 'mysql';
+        // Подключение к базе данных
+        $dbHost = 'localhost';
+        $dbName = 'testingsystem';
+        $dbUser = 'postgres';
+        $dbPass = 'mysql';
 
-try {
-    $pdo = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Ошибка подключения к базе данных: " . $e->getMessage());
-}
+        try {
+            $pdo = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Ошибка подключения к базе данных: " . $e->getMessage());
+        }
 
-// Получение переданного значения "testName" из предыдущей страницы
-$testName = isset($_SESSION['testName']) ? $_SESSION['testName'] : '';
+        // Получение переданного значения "testName" из предыдущей страницы
+        $testName = isset($_SESSION['testName']) ? $_SESSION['testName'] : '';
 
-// Получение текущего индекса строки
-$currentRowIndex = isset($_POST['currentRowIndex']) ? $_POST['currentRowIndex'] : 0;
+        // Получение текущего индекса строки
+        $currentRowIndex = isset($_POST['currentRowIndex']) ? $_POST['currentRowIndex'] : 0;
 
-// Получение имени пользователя из сессии
-$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+        // Получение имени пользователя из сессии
+        $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
-// Получение значения параметра division из сессии
-$division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
+        // Получение значения параметра division из сессии
+        $division = isset($_SESSION['division']) ? $_SESSION['division'] : '';
 
-// Получение данных из базы данных для указанного теста
-$stmt = $pdo->prepare("SELECT * FROM tests WHERE test_name = :testName LIMIT 1 OFFSET :offset");
-$stmt->bindParam(':testName', $testName);
-$stmt->bindParam(':offset', $currentRowIndex, PDO::PARAM_INT);
-$stmt->execute();
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Обработка отправленной формы
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Получение данных из формы
-    $answer = isset($_POST['answer']) ? $_POST['answer'] : '';
-    $testName = isset($_POST['testName']) ? $_POST['testName'] : '';
-    $question = isset($_POST['question']) ? $_POST['question'] : '';
-    $rightAnswer = isset($_POST['rightAnswer']) ? $_POST['rightAnswer'] : '';
-
-    // Сравнение значений полей и установка значения поля "is_correct"
-    $isCorrect = ($answer === $rightAnswer) ? 1 : 0;
-
-    try {
-        // Вставка ответа пользователя, test_name, question, right_answer, is_correct, username и division в базу данных
-        $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, is_correct, username, division) VALUES (:answer, :test_name, :question, :right_answer, :is_correct, :username, :division)");
-        $stmt->bindParam(':answer', $answer);
-        $stmt->bindParam(':test_name', $testName);
-        $stmt->bindParam(':question', $question);
-        $stmt->bindParam(':right_answer', $rightAnswer);
-        $stmt->bindParam(':is_correct', $isCorrect);
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':division', $division);
-
+        // Получение данных из базы данных для указанного теста
+        $stmt = $pdo->prepare("SELECT * FROM tests WHERE test_name = :testName LIMIT 1 OFFSET :offset");
+        $stmt->bindParam(':testName', $testName);
+        $stmt->bindParam(':offset', $currentRowIndex, PDO::PARAM_INT);
         $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    } catch (PDOException $e) {
-        echo 'Ошибка сохранения ответа: ' . $e->getMessage();
-    }
-}
-?>
+        // Обработка отправленной формы
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Получение данных из формы
+            $answer = isset($_POST['answer']) ? $_POST['answer'] : '';
+            $testName = isset($_POST['testName']) ? $_POST['testName'] : '';
+            $question = isset($_POST['question']) ? $_POST['question'] : '';
+            $rightAnswer = isset($_POST['rightAnswer']) ? $_POST['rightAnswer'] : '';
+
+            // Сравнение значений полей и установка значения поля "is_correct"
+            $isCorrect = ($answer === $rightAnswer) ? 1 : 0;
+
+            try {
+                // Вставка ответа пользователя, test_name, question, right_answer, is_correct, username и division в базу данных
+                $stmt = $pdo->prepare("INSERT INTO results (answer, test_name, question, right_answer, is_correct, username, division) VALUES (:answer, :test_name, :question, :right_answer, :is_correct, :username, :division)");
+                $stmt->bindParam(':answer', $answer);
+                $stmt->bindParam(':test_name', $testName);
+                $stmt->bindParam(':question', $question);
+                $stmt->bindParam(':right_answer', $rightAnswer);
+                $stmt->bindParam(':is_correct', $isCorrect);
+                $stmt->bindParam(':username', $username);
+                $stmt->bindParam(':division', $division);
+
+                $stmt->execute();
+
+            } catch (PDOException $e) {
+                echo 'Ошибка сохранения ответа: ' . $e->getMessage();
+            }
+        }
+        ?>
 
 <!DOCTYPE html>
 <html>
@@ -468,7 +431,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <form method="post" action="">
-        <?php
+    <?php
         // Вывод данных в таблице и форме
         if (!empty($row)) {
             echo '<input type="hidden" name="currentRowIndex" value="' . ($currentRowIndex + 1) . '">';

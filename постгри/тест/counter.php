@@ -68,3 +68,23 @@ try {
     die("Ошибка выполнения запроса: " . $e->getMessage());
 }
 ?>
+<style>
+    .title_out{
+position: absolute;
+width: 154px;
+height: 42px;
+left: 987px;
+top: 66px;
+font-family: 'Forum';
+font-style: normal;
+text-decoration: none;
+font-weight: 400;
+font-size: 45px;
+line-height: 50px;
+display: flex;
+align-items: center;
+text-align: center;
+color: #203A46;
+}
+</style>
+<div class = "title_out"><a href="/PD/постгри/тест/exit.php">Выход</a></div>
